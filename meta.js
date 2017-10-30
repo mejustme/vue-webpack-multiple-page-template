@@ -44,6 +44,12 @@ module.exports = {
       "type": "confirm",
       "message": "Install vue-router?"
     },
+    "iconName": {
+      "type": "string",
+      "required": true,
+      "message": "icon class name",
+      "default": "app-icon"
+    },
     "lint": {
       "type": "confirm",
       "message": "Use ESLint to lint your code?"
