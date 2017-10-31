@@ -1,0 +1,150 @@
+import config from './config'
+
+const SETTING_KEY = 'xhr-base'
+
+/**
+ * xhr Base Class
+ * @class
+ */
+class Base {
+  constructor (obj) {
+    this._$init(obj)
+  }
+
+  /**
+   * 初始化函数
+   * @private
+   * @param {Object} obj
+   * @param {number} obj.uid [uid=window._uid]- 登录用户id
+   * @param {string} obj.token [token=window._token] - 登录用户token
+   * @returns {void}
+   */
+  _$init ({uid, token} = {}) {
+    Base._uid = uid
+    Base._token = token
+    Base._kop = Base.kop ? Base.kop : new window.KUI.KOP()
+    this._$setConfig(SETTING_KEY, config)
+  }
+
+  /**
+   * 设置全局接口配置
+   * @private
+   * @param {string} SETTING_KEY - xhr实体唯一key
+   * @param {Object} config - xhr实体配置
+   * @returns {void}
+   */
+  _$setConfig (SETTING_KEY, config) {
+    Base._config = Base._config || {}
+    Base._config[SETTING_KEY] = Base._config[SETTING_KEY] || config
+    this._SETTING_KEY = this._SETTING_KEY || SETTING_KEY
+  }
+
+  /**
+   * 设置全局接口配置
+   * @public
+   * @param {string} key - kop接口api
+   * @param {Object} data [data={}] - 上传后端数据
+   * @returns {Object} - Promise实例
+   */
+  $kop (key, data = {}) {
+    var that = this
+    if (process.env.NODE_ENV !== 'production') {
+      var config = that.constructor._config[that._SETTING_KEY][key]
+      console.log(config.api)
+      console.log(data)
+      if (
+        (window.KOPConfig && !window.KOPConfig.host) &&
+        !config.offMock && config.mock) {
+        return new Promise(function (resolve, reject) {
+          var result = window.$.isFunction(config.mock) ? config.mock() : config.mock
+          console.log(result)
+          if (result.code === 200) {
+            resolve(result)
+          } else {
+            reject(result)
+          }
+        })
+      }
+    }
+
+    return new Promise(function (resolve, reject) {
+      that.constructor._kop.send(
+        that.constructor._config[that._SETTING_KEY][key].api,
+        data,
+        that.constructor._uid || window._uid,
+        that.constructor._token || window._token, // Base._token = token || window._uid  // 测试环境 token 传uid todo 判断ip
+        function (result) {
+          result = {
+            code: 200,
+            data: result
+          }
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(result)
+          }
+          resolve(result)
+        },
+        function (err, msg) {
+          var result = {
+            code: err,
+            msg: msg
+          }
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(result)
+          }
+          reject(result)
+        })
+    })
+  }
+
+  /**
+   * 获取item
+   * @public
+   * @param {Object} data [data={}]
+   * @returns {Object} - Promise实例
+   */
+  $getItem (data = {}) {
+    return this.$kop('get-item', data)
+  }
+
+  /**
+   * 获取itemList
+   * @public
+   * @param {Object} data [data={}]
+   * @returns {Object} - Promise实例
+   */
+  $getItemList (data = {}) {
+    return this.$kop('get-item-list', data)
+  }
+
+  /**
+   * 添加item
+   * @public
+   * @param {Object} data [data={}]
+   * @returns {Object} - Promise实例
+   */
+  $addItem (data = {}) {
+    return this.$kop('add-item', data)
+  }
+
+  /**
+   * 更新item
+   * @public
+   * @param {Object} data [data={}]
+   * @returns {Object} - Promise实例
+   */
+  $updateItem (data = {}) {
+    return this.$kop('update-item', data)
+  }
+
+  /**
+   * 删除item
+   * @public
+   * @param {Object} data [data={}]
+   * @returns {Object} - Promise实例
+   */
+  $deleteItem (data = {}) {
+    return this.$kop('delete-item', data)
+  }
+}
+
+export default Base

@@ -4,11 +4,12 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsRoot: path.resolve(__dirname, '../build'),
+    assetsSubDirectory: '',
     assetsPublicPath: '/',
-    productionSourceMap: true,
+    // assetsPublicPath: '//assets-daily.kuaidadi.com/zhuanche/jieji/1.0.3/', // todo stable
+    // assetsPublicPath: '//assets.kuaidadi.com/zhuanche/jieji/1.0.3/', // todo online
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:

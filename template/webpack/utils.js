@@ -1,4 +1,5 @@
 var path = require('path')
+var glob = require('glob')
 var config = require('../config')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
@@ -68,4 +69,18 @@ exports.styleLoaders = function (options) {
     })
   }
   return output
+}
+
+// 获取多页面入口（打包app.js / 页面模板app.html）
+exports.getEntry = function (globPaths) {
+  var entries = {}
+  var pathname
+  for (var globPath of globPaths) {
+    glob.sync(globPath).forEach(function (entry) {
+      pathname = entry.match(/\.\/src\/(.+app)(.html|.js)/)[1]
+      entries[pathname] = entry
+    })
+  }
+  // console.log(entries)
+  return entries
 }
