@@ -68,11 +68,16 @@ class Base {
     }
 
     return new Promise(function (resolve, reject) {
+      var uid = that.constructor._uid || window._uid
+      // test环境 不进行token校验，token传uid
+      var token = (window.KOPConfig && window.KOPConfig.host === "10.0.53.63")
+        ? uid : that.constructor._token || window._token
+
       that.constructor._kop.send(
         that.constructor._config[that._SETTING_KEY][key].api,
         data,
-        that.constructor._uid || window._uid,
-        that.constructor._token || window._token, // Base._token = token || window._uid  // 测试环境 token 传uid todo 判断ip
+        uid,
+        token,
         function (result) {
           result = {
             code: 200,
