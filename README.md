@@ -11,8 +11,9 @@
 - 路由异步加载模块 + 自动化静态资源url-环境+版本号
 - 多页公共资源共享
 - 开发热加载
+- eslint规范代码
 - git diff 屏蔽build文件
-- xhr
+- xhr(mock数据)
 - svg2icon
 
 ## Documentation
