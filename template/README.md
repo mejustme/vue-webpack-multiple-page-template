@@ -16,7 +16,6 @@ npm run daily
 
 # build for online
 npm run online
-
 {{#unit}}
 
 # run unit tests
