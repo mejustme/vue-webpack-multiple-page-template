@@ -13,7 +13,7 @@
 - 开发热加载
 - eslint规范代码
 - git diff 屏蔽build文件
-- xhr(mock数据)
+- xhr (支持mock数据)
 - svg2icon
 
 ## Documentation
