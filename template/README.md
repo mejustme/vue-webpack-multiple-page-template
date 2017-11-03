@@ -33,4 +33,10 @@ npm test
 {{/if_or}}
 ```
 
+# git diff
+```
+ // 执行一次 下面命令，git diff 不再显示.gitattributes里配置的内容
+ git config diff.nodiff.command true --global
+```
+
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
