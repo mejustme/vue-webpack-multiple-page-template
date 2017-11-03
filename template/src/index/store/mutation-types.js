@@ -1,0 +1,8 @@
+
+// module one
+export const GET_ORDER_LIST_SUCCESS = 'GET_ORDER_LIST_SUCCESS'
+export const GET_ORDER_LIST_DATA_ERROR = 'GET_ORDER_LIST_DATA_ERROR'
+
+// module two
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS'
+export const GET_USER_ERROR = 'GET_USER_ERROR'

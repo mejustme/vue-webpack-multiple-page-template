@@ -1,0 +1,15 @@
+.f-fl{
+  float: left;
+}
+.f-fr{
+  float: right;
+}
+.f-vam{
+  vertical-align: middle;
+}
+
+.f-cf::after{
+  content: '';
+  clear: both;
+  display: block;
+}
