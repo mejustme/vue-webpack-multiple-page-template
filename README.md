@@ -1,6 +1,6 @@
 # vue-webpack-multiple-page-template
 
-> vue/vuex(可选)/vue-router(可选)自动化工程模板
+> vue/vuex(可选)/vue-router(可选)自动化工程模板 <br/>
 > 支持多页/单页、路由异步加载模块、多页公共资源共享、开发热加载、xhr抽象、字体图标自动生成
 
 ## Documentation
