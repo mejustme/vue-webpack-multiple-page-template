@@ -1,6 +1,6 @@
 # vue-webpack-multiple-page-template
 
-> vue/vuex/vue-router自动化工程模板 - 支持多页/单页
+> vue/vuex(可选)/vue-router(可选)自动化工程模板 - 支持多页/单页
 
 ## Documentation
 
