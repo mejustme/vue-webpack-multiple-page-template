@@ -1,14 +1,35 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+var argv = require('yargs').argv
+var branch = require('git-branch');
+
+var dailyPublicPathPrefix = '//assets-daily.xiaojukeji.com/{{ gitLabPlace }}'
+var onlinePublicPathPrefix = '//assets.xiaojukeji.com/{{ gitLabPlace }}'
+var curBranchVersion = ''
+
+if (argv.env) {
+  var branchName = branch.sync();
+  var matchResult = branchName && branchName.match(/(daily|publish)\/(\d+\.\d+\.\d+)/)
+  if (matchResult) {
+    curBranchVersion = matchResult[2]
+  } else {
+    console.error('分支版本命名不正确')
+    curBranchVersion = 'errorVersion'
+  }
+}
 
 module.exports = {
   build: {
     env: require('./prod.env'),
     assetsRoot: path.resolve(__dirname, '../build'),
     assetsSubDirectory: '',
-    assetsPublicPath: '/',
-    // assetsPublicPath: '//assets-daily.kuaidadi.com/zhuanche/jieji/1.0.3/', // todo stable
-    // assetsPublicPath: '//assets.kuaidadi.com/zhuanche/jieji/1.0.3/', // todo online
+    assetsPublicPath: (curBranchVersion && curBranchVersion !== 'errorVersion' )?
+      argv.env === 'online'
+        ? `${onlinePublicPathPrefix}/${curBranchVersion}/`
+        : `${dailyPublicPathPrefix}/${curBranchVersion}/`
+      : curBranchVersion === 'errorVersion'
+        ? null
+        : '/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -26,7 +47,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8080,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: '',
     assetsPublicPath: '/',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"

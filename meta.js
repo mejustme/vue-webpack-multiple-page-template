@@ -14,6 +14,12 @@ module.exports = {
       "required": true,
       "message": "Project name"
     },
+    "gitLabPlace": {
+      "type": "string",
+      "required": true,
+      "message": "where the project in gitLab for get js/css assert url",
+      "default": "kui/starui"
+    },
     "description": {
       "type": "string",
       "required": false,
