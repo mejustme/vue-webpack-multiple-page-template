@@ -13,7 +13,10 @@ This is a project template for [vue-cli](https://github.com/vuejs/vue-cli). **It
 
 ``` bash
 $ npm install -g vue-cli
-$ vue init webpack my-project
+$ vue init ~/fs/path/to-custom-template my-project 本地
+$ vue init '<template-name>#<branch-name>' <project-name> 特定分支
+$ vue init webpack my-project 官方仓库
+$ vue init mejustme/vue-webpack-multiple-page-template my-project  特定人github仓库
 $ cd my-project
 $ npm install
 $ npm run dev
