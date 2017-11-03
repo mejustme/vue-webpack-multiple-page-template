@@ -9,7 +9,7 @@ export default {
         data: (function () {
           return {
             userName: '陈钦辉',
-            isOnline: NumUtil.random(0, 1),
+            isOnline: NumUtil.random(0, 1)
           }
         })()
       }

@@ -70,7 +70,7 @@ class Base {
     return new Promise(function (resolve, reject) {
       var uid = that.constructor._uid || window._uid
       // test环境 不进行token校验，token传uid
-      var token = (window.KOPConfig && window.KOPConfig.host === "10.0.53.63")
+      var token = (window.KOPConfig && window.KOPConfig.host === '10.0.53.63')
         ? uid : that.constructor._token || window._token
 
       that.constructor._kop.send(
