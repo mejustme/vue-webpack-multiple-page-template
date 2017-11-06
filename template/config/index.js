@@ -3,7 +3,7 @@ var path = require('path')
 var argv = require('yargs').argv
 var branch = require('git-branch');
 
-var dailyPublicPathPrefix = '//assets-daily.xiaojukeji.com/{{ gitLabPlace }}'
+var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/{{ gitLabPlace }}'
 var onlinePublicPathPrefix = '//assets.xiaojukeji.com/{{ gitLabPlace }}'
 var curBranchVersion = ''
 
