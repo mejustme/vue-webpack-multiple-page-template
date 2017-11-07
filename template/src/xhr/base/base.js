@@ -49,12 +49,12 @@ class Base {
   $kop (key, data = {}) {
     var that = this
     if (process.env.NODE_ENV !== 'production') {
-      var config = that.constructor._config[that._SETTING_KEY][key]
+      var allConfig = that.constructor._config[that._SETTING_KEY]
+      var config = allConfig[key]
       console.log(config.api)
       console.log(data)
       if (
-        (window.KOPConfig && !window.KOPConfig.host) &&
-        !config.offMock && config.mock) {
+        (window.KOPConfig && !window.KOPConfig.host) && !allConfig.offMock && !config.offMock && config.mock) {
         return new Promise(function (resolve, reject) {
           var result = window.$.isFunction(config.mock) ? config.mock() : config.mock
           console.log(result)
