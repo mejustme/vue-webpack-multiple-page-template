@@ -171,7 +171,7 @@ class Base {
    * @returns {Object} - Promise实例
    */
   $xhr (key, data = {}) {
-    this[this.constructor._kop ? '$kop' : '$ajax'].apply(this, arguments)
+    return this[this.constructor._kop ? '$kop' : '$ajax'].apply(this, arguments)
   }
 
   /**
