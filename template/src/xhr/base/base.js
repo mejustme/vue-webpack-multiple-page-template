@@ -22,7 +22,11 @@ class Base {
   _$init ({uid, token} = {}) {
     Base._uid = uid
     Base._token = token
-    Base._kop = Base.kop ? Base.kop : new window.KUI.KOP()
+    Base._kop = Base._kop
+      ? Base._kop
+      : window.KUI && window.KUI.KOP
+        ? new window.KUI.KOP()
+        : null
     this._$setConfig(SETTING_KEY, config)
   }
 
@@ -37,6 +41,60 @@ class Base {
     Base._config = Base._config || {}
     Base._config[SETTING_KEY] = Base._config[SETTING_KEY] || config
     this._SETTING_KEY = this._SETTING_KEY || SETTING_KEY
+  }
+
+  /**
+   * $ajax
+   * @param {String} key - 接口api
+   * @param {Object} data - 上传数据
+   * @public
+   * @public
+   * @returns {Object} promise
+   */
+  $ajax (key, data) {
+    var that = this
+    return new Promise(function (resolve, reject) {
+      // 支持mock数据
+      var allConfig = that.constructor._config[that._SETTING_KEY]
+      var config = allConfig[key]
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (!config) {
+          console.error(key + ' 没有对应配置')
+          return
+        }
+        if (allConfig.offMock && !config.offMock && config.mock) {
+          var result = $.isFunction(config.mock) ? config.mock() : (config.mock || {})
+          console.log(config.api)
+          console.log(data)
+          console.log(result)
+          if (result && (result.code === 200 || result.code === 0)) {
+            resolve(result)
+          } else {
+            reject(result)
+          }
+          return
+        }
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: /^(http:|https:|\/)/.test(config.api) ? config.api : (window.location.origin + window.location.pathname + '?actype=' + config.api),
+        data: JSON.stringify(data),
+        contentType: 'application/json;charset=utf-8'
+      }).then(function (result) {
+        if (result.code === 200 || result.code === 0) {
+          resolve(result)
+        } else {
+          reject(result)
+        }
+      }, function (xhr, errorType) {
+        reject({
+          code: errorType,
+          msg: '网络出错，请稍后重试'
+        })
+      })
+    })
   }
 
   /**
@@ -102,13 +160,24 @@ class Base {
   }
 
   /**
+   * 接口，封装了$kop/$ajax, 全局无kop, 就用jQuery.ajax
+   * @public
+   * @param {string} key - kop接口api
+   * @param {Object} data [data={}] - 上传后端数据
+   * @returns {Object} - Promise实例
+   */
+  $xhr (key, data = {}) {
+    this[this.constructor._kop? '$kop' : '$ajax'].apply(this, arguments)
+  }
+
+  /**
    * 获取item
    * @public
    * @param {Object} data [data={}]
    * @returns {Object} - Promise实例
    */
   $getItem (data = {}) {
-    return this.$kop('get-item', data)
+    return this.$xhr('get-item', data)
   }
 
   /**
@@ -118,7 +187,7 @@ class Base {
    * @returns {Object} - Promise实例
    */
   $getItemList (data = {}) {
-    return this.$kop('get-item-list', data)
+    return this.$xhr('get-item-list', data)
   }
 
   /**
@@ -128,7 +197,7 @@ class Base {
    * @returns {Object} - Promise实例
    */
   $addItem (data = {}) {
-    return this.$kop('add-item', data)
+    return this.$xhr('add-item', data)
   }
 
   /**
@@ -138,7 +207,7 @@ class Base {
    * @returns {Object} - Promise实例
    */
   $updateItem (data = {}) {
-    return this.$kop('update-item', data)
+    return this.$xhr('update-item', data)
   }
 
   /**
@@ -148,7 +217,7 @@ class Base {
    * @returns {Object} - Promise实例
    */
   $deleteItem (data = {}) {
-    return this.$kop('delete-item', data)
+    return this.$xhr('delete-item', data)
   }
 }
 
