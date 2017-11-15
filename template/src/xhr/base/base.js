@@ -63,7 +63,7 @@ class Base {
           console.error(key + ' 没有对应配置')
           return
         }
-        if (allConfig.offMock && !config.offMock && config.mock) {
+        if (!allConfig.offMock && !config.offMock && config.mock) {
           var result = $.isFunction(config.mock) ? config.mock() : (config.mock || {})
           console.log(config.api)
           console.log(data)
