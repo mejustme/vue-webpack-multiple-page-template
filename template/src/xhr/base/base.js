@@ -102,13 +102,17 @@ class Base {
    * @public
    * @param {string} key - kop接口api
    * @param {Object} data [data={}] - 上传后端数据
-   * @returns {Object} - Promise实例
+   * @returns {*} - Promise实例
    */
   $kop (key, data = {}) {
     var that = this
     if (process.env.NODE_ENV !== 'production') {
       var allConfig = that.constructor._config[that._SETTING_KEY]
       var config = allConfig[key]
+      if (!config) {
+        console.error(key + ' 没有对应配置')
+        return
+      }
       console.log(config.api)
       console.log(data)
       if (
