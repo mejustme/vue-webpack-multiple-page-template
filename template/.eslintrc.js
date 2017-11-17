@@ -11,7 +11,8 @@ module.exports = {
   },
   globals: {
     Vue: false,
-    $: false
+    $: false,
+    StarUI: false
   },
   {{#if_eq lintConfig "standard"}}
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
