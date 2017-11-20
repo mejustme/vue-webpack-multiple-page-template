@@ -1,14 +1,14 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 var argv = require('yargs').argv
-var branch = require('git-branch');
+var branch = require('git-branch')
 
 var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/{{ gitLabPlace }}'
 var onlinePublicPathPrefix = '//assets.xiaojukeji.com/{{ gitLabPlace }}'
 var curBranchVersion = ''
 
 if (argv.env) {
-  var branchName = branch.sync();
+  var branchName = branch.sync()
   var matchResult = branchName && branchName.match(/(daily|publish)\/(\d+\.\d+\.\d+)/)
   if (matchResult) {
     curBranchVersion = matchResult[2]
