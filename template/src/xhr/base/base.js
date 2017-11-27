@@ -58,23 +58,21 @@ class Base {
       var allConfig = that.constructor._config[that._SETTING_KEY]
       var config = allConfig[key]
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== 'production' && !allConfig.offMock && !config.offMock && config.mock) {
         if (!config) {
           console.error(key + ' 没有对应配置')
           return
         }
-        if (!allConfig.offMock && !config.offMock && config.mock) {
-          var result = $.isFunction(config.mock) ? config.mock(data) : (config.mock || {})
-          console.log(config.api)
-          console.log(data)
-          console.log(result)
-          if (result && (result.code === 200 || result.code === 0)) {
-            resolve(result)
-          } else {
-            reject(result)
-          }
-          return
+        var result = $.isFunction(config.mock) ? config.mock(data) : (config.mock || {})
+        console.log(config.api)
+        console.log(data)
+        console.log(result)
+        if (result && (result.code === 200 || result.code === 0)) {
+          resolve(result)
+        } else {
+          reject(result)
         }
+        return
       }
 
       $.ajax({
