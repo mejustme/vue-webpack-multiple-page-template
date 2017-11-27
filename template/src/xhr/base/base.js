@@ -64,7 +64,7 @@ class Base {
           return
         }
         if (!allConfig.offMock && !config.offMock && config.mock) {
-          var result = $.isFunction(config.mock) ? config.mock() : (config.mock || {})
+          var result = $.isFunction(config.mock) ? config.mock(data) : (config.mock || {})
           console.log(config.api)
           console.log(data)
           console.log(result)
