@@ -58,7 +58,7 @@ class Base {
       var allConfig = that.constructor._config[that._SETTING_KEY]
       var config = allConfig[key]
 
-      if (process.env.NODE_ENV !== 'production' && !allConfig.offMock && !config.offMock && config.mock) {
+      if (process.env.NODE_ENV !== 'production' && window.location.href.indexOf('//localhost') !== -1 && !allConfig.offMock && !config.offMock && config.mock) {
         if (!config) {
           console.error(key + ' 没有对应配置')
           return
