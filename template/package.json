@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node webpack/dev-server.js",
     "build": "node webpack/build.js  --webpack=prod",
-    "build:dev": "node webpack/build.js --webpack=dev",{{#lint}},
+    "build:dev": "node webpack/build.js --webpack=dev"{{#lint}},
     "lint": "eslint --ext .js,.vue src{{#unit}} test/unit/specs{{/unit}}{{#e2e}} test/e2e/specs{{/e2e}} --fix"{{/lint}},
     "icon": "svg2icon -a true"{{#unit}},
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run"{{/unit}}{{#e2e}},
@@ -102,7 +102,8 @@
     "glob": "^7.1.2",
     "svg2icon": "^1.2.4",
     "git-branch": "^1.0.0",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "puer": "^2.0.0"
   },
   "engines": {
     "node": ">= 4.0.0",

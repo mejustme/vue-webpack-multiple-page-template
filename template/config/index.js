@@ -3,8 +3,8 @@ var path = require('path')
 var argv = require('yargs').argv
 var branch = require('git-branch');
 
-var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/zhuanche/jieji'
-var onlinePublicPathPrefix = '//assets.xiaojukeji.com/zhuanche/jieji'
+var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/{{ gitLabPlace }}'
+var onlinePublicPathPrefix = '//assets.xiaojukeji.com/{{ gitLabPlace }}'
 var publicPathPrefix = ''
 var version = ''
 
@@ -18,7 +18,7 @@ if (argv.webpack && argv.webpack == 'prod') {
     console.warn(`请确认资源路径正确：${publicPathPrefix}/${version}/\n`)
   } else {
     console.error('分支命名规则:daily/xxx, publish/xxx')
-    console.error('如果仅想输出打包后代码，请执行npm run build:dev\n')
+    console.error('如果仅想输出打包后代码，请执行：npm run build:dev\n')
     return
   }
 }
@@ -45,7 +45,7 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     assetsRoot: path.resolve(__dirname, '../build'),
-    port: 8081,
+    port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: '',
     assetsPublicPath: '/',
