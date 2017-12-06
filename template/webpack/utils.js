@@ -99,7 +99,8 @@ exports.getHtmlWebpackPluginArr = function (globPaths) {
       chunksSortMode: 'dependency'
     }
     // 该页面中指定输出特定打包结果
-    conf.chunks = ['vendor', 'manifest', pathname]
+
+    conf.chunks = [{{#extract}}'vendor', 'manifest',{{/extract}}pathname]
     // https://github.com/ampedandwired/html-webpack-plugin
     result.push(new HtmlWebpackPlugin(conf))
   }
