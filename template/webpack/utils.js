@@ -2,6 +2,7 @@ var path = require('path')
 var glob = require('glob')
 var config = require('../config')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
@@ -71,7 +72,7 @@ exports.styleLoaders = function (options) {
   return output
 }
 
-// 获取多页面入口（打包app.js / 页面模板app.html）
+// 获取多页面入口
 exports.getEntry = function (globPaths) {
   var entries = {}
   var pathname
@@ -83,4 +84,24 @@ exports.getEntry = function (globPaths) {
   }
   // console.log(entries)
   return entries
+}
+
+// 独立个性化template，输出相应page.html
+exports.getHtmlWebpackPluginArr = function (globPaths) {
+  var pages = exports.getEntry([globPaths])
+  var result = []
+  for (var pathname in pages) {
+    var conf = {
+      filename: pathname + '.html',
+      template: pages[pathname],
+      inject: true,
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }
+    // 该页面中指定输出特定打包结果
+    conf.chunks = ['vendor', 'manifest', pathname]
+    // https://github.com/ampedandwired/html-webpack-plugin
+    result.push(new HtmlWebpackPlugin(conf))
+  }
+  return result
 }

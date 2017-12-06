@@ -46,6 +46,10 @@ module.exports = {
         }
       ]
     },
+    "extract": {
+      "type": "confirm",
+      "message": "Different pages need extract commons chunk"
+    },
     "router": {
       "type": "confirm",
       "message": "Install vue-router?"

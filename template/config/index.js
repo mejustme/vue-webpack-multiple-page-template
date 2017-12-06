@@ -1,20 +1,25 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 var argv = require('yargs').argv
-var branch = require('git-branch')
+var branch = require('git-branch');
 
-var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/{{ gitLabPlace }}'
-var onlinePublicPathPrefix = '//assets.xiaojukeji.com/{{ gitLabPlace }}'
-var curBranchVersion = ''
+var dailyPublicPathPrefix = '//assets-daily.kuaidadi.com/zhuanche/jieji'
+var onlinePublicPathPrefix = '//assets.xiaojukeji.com/zhuanche/jieji'
+var publicPathPrefix = ''
+var version = ''
 
-if (argv.env) {
-  var branchName = branch.sync()
+if (argv.webpack && argv.webpack == 'prod') {
+  var branchName = branch.sync();
   var matchResult = branchName && branchName.match(/(daily|publish)\/(\d+\.\d+\.\d+)/)
   if (matchResult) {
-    curBranchVersion = matchResult[2]
+    publicPathPrefix = matchResult[1] == 'publish'? onlinePublicPathPrefix : dailyPublicPathPrefix
+    version = matchResult[2]
+    console.info('当前分支', branchName)
+    console.warn(`请确认资源路径正确：${publicPathPrefix}/${version}/\n`)
   } else {
-    console.error('分支版本命名不正确')
-    curBranchVersion = 'errorVersion'
+    console.error('分支命名规则:daily/xxx, publish/xxx')
+    console.error('如果仅想输出打包后代码，请执行npm run build:dev\n')
+    return
   }
 }
 
@@ -23,13 +28,7 @@ module.exports = {
     env: require('./prod.env'),
     assetsRoot: path.resolve(__dirname, '../build'),
     assetsSubDirectory: '',
-    assetsPublicPath: (curBranchVersion && curBranchVersion !== 'errorVersion' )?
-      argv.env === 'online'
-        ? `${onlinePublicPathPrefix}/${curBranchVersion}/`
-        : `${dailyPublicPathPrefix}/${curBranchVersion}/`
-      : curBranchVersion === 'errorVersion'
-        ? null
-        : '/',
+    assetsPublicPath: publicPathPrefix? `${publicPathPrefix}/${version}/` : '/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -45,7 +44,8 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    assetsRoot: path.resolve(__dirname, '../build'),
+    port: 8081,
     autoOpenBrowser: true,
     assetsSubDirectory: '',
     assetsPublicPath: '/',

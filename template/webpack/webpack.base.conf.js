@@ -1,7 +1,10 @@
 var path = require('path')
 var utils = require('./utils')
+var webpack = require('webpack')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -14,21 +17,32 @@ module.exports = {
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      : config.dev.assetsPublicPath,
+    chunkFilename: utils.assetsPath('[id].js')
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      {{#if_eq build "standalone"}}
       'vue$': 'vue/dist/vue.esm.js',
-      {{/if_eq}}
       '@': resolve('src'),
-      'xhr': resolve('src/xhr')
+      'xhr': resolve('src/xhr'),
+      'common': resolve('src/common'),
+      'src': resolve('src')
     }
   },
   module: {
     rules: [
       {{#lint}}
+      {
+          test: /\.(js|vue)$/,
+            loader: 'eslint-loader',
+          enforce: 'pre',
+          include: [resolve('src'), resolve('test')],
+          options: {
+            formatter: require('eslint-friendly-formatter')
+          }
+      },
+      {{/lint}}
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
@@ -38,7 +52,6 @@ module.exports = {
           formatter: require('eslint-friendly-formatter')
         }
       },
-      {{/lint}}
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -54,7 +67,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('imgs/[name].[ext]')
+          name: utils.assetsPath('img/[name].[ext]')
         }
       },
       {
@@ -73,6 +86,38 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[ext]')
         }
       }
-    ]
-  }
+    ].concat(utils.styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true
+    }))
+  },
+  plugins: [
+    new ExtractTextPlugin({
+      filename: utils.assetsPath('[name].css')
+    }),
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        safe: true
+      }
+    }),
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module, count) {
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        )
+      }
+    }),
+    // extract webpack runtime and module manifest to its own file in order to
+    // prevent vendor hash from being updated whenever app bundle is updated
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      chunks: ['vendor']
+    })
+  ].concat(utils.getHtmlWebpackPluginArr('./src/**/app.html'))
 }
