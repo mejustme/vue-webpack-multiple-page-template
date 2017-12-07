@@ -10,12 +10,18 @@ var chalk = require('chalk')
 var webpack = require('webpack')
 var config = require('../config')[argv.webpack === 'dev'? 'dev' : 'build']
 var webpackConfig = argv.webpack === 'dev'? require('./webpack.dev.conf') : require('./webpack.prod.conf')
+var isWatch = argv.watch === 'true'
 
 var spinner = ora(`building for ${argv.webpack}...`)
 spinner.start()
 
 rm(path.join(config.assetsRoot, config.assetsSubDirectory), err => {
   if (err) throw err
+
+  if (isWatch) {
+    webpackConfig.watch = true
+  }
+
   webpack(webpackConfig, function (err, stats) {
     spinner.stop()
     if (err) throw err
@@ -33,9 +39,5 @@ rm(path.join(config.assetsRoot, config.assetsSubDirectory), err => {
     }
 
     console.log(chalk.cyan('  Build complete.\n'))
-    console.log(chalk.yellow(
-      '  Tip: built files are meant to be served over an HTTP server.\n' +
-      '  Opening index.html over file:// won\'t work.\n'
-    ))
   })
 })
