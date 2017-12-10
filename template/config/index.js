@@ -12,7 +12,7 @@ if (argv.webpack && argv.webpack == 'prod') {
   var branchName = branch.sync();
   var matchResult = branchName && branchName.match(/(daily|publish)\/(\d+\.\d+\.\d+)/)
   if (matchResult) {
-    publicPathPrefix = matchResult[1] == 'publish'? onlinePublicPathPrefix : dailyPublicPathPrefix
+    publicPathPrefix = argv.url == 'daily'? dailyPublicPathPrefix : onlinePublicPathPrefix
     version = matchResult[2]
     console.info('当前分支', branchName)
     console.warn(`请确认资源路径正确：${publicPathPrefix}/${version}/\n`)

@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "node webpack/dev-server.js",
-    "dev2build": "node webpack/build.js --webpack=dev --watch=true",
-    "build": "node webpack/build.js  --webpack=prod --watch=false",{{#lint}},
+    "build:dev": "node webpack/build.js --webpack=dev --watch=true",
+    "build:daily": "node webpack/build.js  --url=daily --webpack=prod --watch=false",
+    "build:online": "node webpack/build.js  --url=online --webpack=prod --watch=false"{{#lint}},
     "lint": "eslint --ext .js,.vue src{{#unit}} test/unit/specs{{/unit}}{{#e2e}} test/e2e/specs{{/e2e}} --fix"{{/lint}},
     "icon": "svg2icon -a true"{{#unit}},
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run"{{/unit}}{{#e2e}},
